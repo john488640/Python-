@@ -1,0 +1,57 @@
+# 如何将Python封装成exe文件
+将Python程序打包成exe文件，可以使其在没有安装Python解释器的计算机上运行。最常用的方法是使用PyInstaller工具。以下是详细步骤：
+
+* 安装PyInstaller
+
+首先，使用pip命令安装PyInstaller：
+
+pip install pyinstaller
+
+如果网速较慢，可以使用国内源：
+
+pip install -i https://pypi.douban.com/simple pyinstaller
+
+* 使用PyInstaller打包
+
+切换到Python脚本所在目录： 打开命令行，使用cd命令切换到包含Python脚本的目录。
+
+执行打包命令： pyinstaller -F -w -i your_icon.ico your_script.py 其中： -F 参数表示生成一个独立的可执行文件。 -w 参数表示不显示命令行窗口。 -i 参数用于指定exe文件的图标。
+
+查看生成的exe文件： 打包完成后，会在当前目录下生成一个dist文件夹，里面包含了生成的exe文件。
+
+* 示例
+
+假设有一个名为example.py的Python脚本，并且希望生成的exe文件使用example.ico作为图标，可以执行以下命令：
+
+pyinstaller -F -w -i example.ico example.py
+
+* 虚拟环境打包
+
+为了减少打包后的文件大小，可以使用虚拟环境。以下是使用Anaconda创建虚拟环境并打包的步骤：
+
+创建虚拟环境： conda create -n myenv python=3.6
+
+激活虚拟环境： conda activate myenv
+
+安装必要的库： pip install pyinstaller pandas python-docx
+
+打包Python脚本： pyinstaller -F -w -i example.ico example.py
+
+* 资源嵌入
+
+如果需要将资源文件嵌入到exe文件中，可以使用--add-data参数。例如，将assets文件夹中的资源嵌入到exe文件中：
+
+pyinstaller -F -w --add-data "assets;assets" example.py
+
+在代码中，可以通过以下函数获取资源文件的路径：
+
+import sys
+import os
+
+def get_path(relative_path):
+try:
+base_path = sys._MEIPASS
+except AttributeError:
+base_path = os.path.abspath(".")
+return os.path.join(base_path, relative_path)
+
